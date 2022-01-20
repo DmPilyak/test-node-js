@@ -30,7 +30,7 @@ app.get('/testget', (req, res) =>{
 app.post("/about", urlencodedParser, (req, res) => {
 	console.log(req.method);
 	console.log(req.body.name);
-	res.status(201).send("Create user " + req.body.name);
+	res.status(201).send(JSON.stringify({"from_JS": req.body.name}));
 })
 
 app.listen(PORT, () => {
