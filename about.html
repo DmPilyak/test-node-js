@@ -1,0 +1,59 @@
+<div>
+    <nav>
+      <ul>
+          <li>
+              <a href='/'>Home<a>
+          </li>
+          <li>
+              <a href='/about'>About<a>
+          </li>
+      </ul>
+      <button onclick="sendUID()">Sent</button>
+  </nav>
+  <h1>About page</h1>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.1.0/base64.min.js" integrity="sha512-gysqkfMGKYvQSEPi68aIzL4ffmrQ0I6azOoPJ+ocle8k1bblsHJh7QVVoy4HHQG2iPzvFmRbs81d8kkVSyCkjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.1.0/base64.js" integrity="sha512-S1ZwdmlDDaFLXAWsXRXKnbkNNpmlWFlp5QEsJeiUQnzeLpzp1vxJyMdpCSAgEoAJY21LpQfCyYQ+z+W+1F84Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+
+function sendUID(){
+    var time = Math.floor(Date.now() / 1000);
+    var login = '120178';
+    var secret = "esp00zMvMiUNEE5DLLc8yz54F7yrkWZl0oogizmr5NaGhmIVSp";
+    var body = {"timeout": 30,
+                "ops": [
+                    {
+                    "conv_id": 1027185,
+                    "type": "create",
+                    "obj": "task",
+                    "data": {
+                        "version": "Corezoid API DP 2 (test)",
+                        "param": "somedata"
+                        }
+                    }
+                ]};
+
+                var signature = CryptoJS.enc.Hex.stringify(
+                CryptoJS.SHA1(time + secret + JSON.stringify(body) + secret)
+            );
+
+fetch('https://sync-api.corezoid.com/api/1/json/' + login + '/' + time + '/' + signature + '', {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, OPTIONS, POST, PUT",
+          "Content-type": "application/json; charset=UTF-8",
+          "Accept": "application/json",
+        }
+}).then(response => {
+console.log( response );
+})
+.catch(error => {
+console.log( error );
+});
+};
+
+</script>
